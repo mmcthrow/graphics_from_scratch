@@ -22,6 +22,9 @@ def dot(u, v):
         total += u[i] * v[i]
     return total
 
+def vectorLength(v):
+    return math.sqrt(dot(v, v))
+
 def scalarMultiply(k, v):
     newV = [0] * len(v)
 
@@ -32,7 +35,7 @@ def scalarMultiply(k, v):
 
 # Perform x - y on vectors
 def vectorSum(x, y, difference=False):
-    assert len(x) == len(y), "Vectors don't have the same length"
+    assert len(x) == len(y), "Vectors don't have the same dimensionality"
 
     vSum = [0] * len(x)
 
@@ -99,7 +102,7 @@ def main():
  
                 nDotL = dot(normal, L)
                 if nDotL > 0:
-                    i += light.intensity * nDotL / (len(normal) * len(L))
+                    i += light.intensity * nDotL / (vectorLength(normal) * vectorLength(L))
 
         return i
 
@@ -121,7 +124,7 @@ def main():
 
         position = vectorSum(origin, scalarMultiply(closestT, direction))
         normal = vectorSum(position, closestSphere.center, True)
-        normal = scalarMultiply(1.0 / len(normal), normal)
+        normal = scalarMultiply(1.0 / vectorLength(normal), normal)
 
         finalColor = scalarMultiply(computeLighting(position, normal),
                                     closestSphere.color.vector())
